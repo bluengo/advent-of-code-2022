@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var elfs []int
-	//var candy_bag []int
+	var candy_bag []int
 
 	lines, err := openFile("inputs-day1.txt")
 	if err != nil {
@@ -18,7 +18,18 @@ func main() {
 
 	for _, line := range lines {
 		num, _ := strconv.Atoi(line)
-		elfs = append(elfs, num)
+		if num != 0 {
+			// If the numer is not 0, append calories to "bag"
+			candy_bag = append(candy_bag, num)
+			//fmt.Println(candy_bag)
+		} else {
+			// A zero means space in the input file, therefore, a new elf
+			// Sum all calories for this Elf
+			total := sumCals(candy_bag)
+			elfs = append(elfs, total)
+			candy_bag = nil
+			continue
+		}
 	}
 
 	fattest := highestCals(elfs)
@@ -42,6 +53,14 @@ func openFile(file string) ([]string, error) {
 	}
 
 	return fileLines, nil
+}
+
+func sumCals(candy_bag []int) int {
+	sum := 0
+	for _, candy := range candy_bag {
+		sum = sum + candy
+	}
+	return sum
 }
 
 func highestCals(elfs []int) int {
