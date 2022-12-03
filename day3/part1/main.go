@@ -25,7 +25,6 @@ import (
 
 func main() {
 	inputs, err := openFile("inputs-day3.txt")
-	//inputs, err := openFile("example.txt")
 	if err != nil {
 		panic("Unable to open inputs file")
 	}
@@ -38,7 +37,7 @@ func main() {
 		half := len(rucksack) / 2
 		comp1 := rucksack[:half]
 		comp2 := rucksack[half:]
-		//fmt.Println(comp1, comp2)
+
 		for _, x := range comp1 {
 			if checkIfIsInSlice(x, comp2) {
 				common = append(common, x)
@@ -47,8 +46,7 @@ func main() {
 		}
 	}
 	alfa := generateAlphabet()
-	//fmt.Println(alfa, len(alfa))
-	//fmt.Println(common)
+
 	for _, x := range common {
 		index, err := getIndex(x, alfa)
 		if err != nil {
