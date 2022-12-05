@@ -26,27 +26,50 @@ func main() {
 		{"R", "D", "L", "Q", "J", "Z", "M", "T"},
 	}
 
-	inputs, err := openFile("example.txt")
+	//inputs, err := openFile("example.txt")
+	inputs, err := openFile("../inputs-day5.txt")
 	if err != nil {
 		panic(err)
 	}
 
+	//====DEBUG
+	//fmt.Println(crane)
 	for _, line := range inputs {
-		fmt.Println(line)
 		s := strings.Split(line, " ")
 		move, _ := strconv.Atoi(s[1])
 		src, _ := strconv.Atoi(s[3])
 		dst, _ := strconv.Atoi(s[5])
-		//fmt.Println(move, src, dst)
 
-		cargo := revertSlice(crane[src][:move])
-
-		// Move cargo:
+		// Load
+		load := []string{}
+		cinta := revertSlice(crane[src])
 		for x := 0; x < move; x++ {
-			crane[dst] = append(crane[dst], cargo[x])
+			load = append(load, cinta[x])
 		}
-		fmt.Println(crane)
+
+		// Source
+		srcslice := []string{}
+		for x := 0; x < (len(crane[src]) - move); x++ {
+			srcslice = append(srcslice, crane[src][x])
+		}
+
+		// Destination
+		dstslice := crane[dst]
+		//box := revertSlice(load)
+		for x := 0; x < len(load); x++ {
+			dstslice = append(dstslice, load[x])
+		}
+
+		// Update
+		crane[src] = srcslice
+		crane[dst] = dstslice
 	}
+	// Print result
+	out := []string{}
+	for x := 1; x <= 9; x++ {
+		out = append(out, crane[x][(len(crane[x])-1)])
+	}
+	fmt.Println(out)
 }
 
 func openFile(file string) ([]string, error) {
@@ -70,8 +93,8 @@ func openFile(file string) ([]string, error) {
 
 func revertSlice(array []string) []string {
 	var result []string
-	for _, x := range array {
-		result = append(result, x)
+	for x := (len(array) - 1); x >= 0; x-- {
+		result = append(result, array[x])
 	}
 	return result
 }
