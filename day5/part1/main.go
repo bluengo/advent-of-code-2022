@@ -32,8 +32,6 @@ func main() {
 		panic(err)
 	}
 
-	//====DEBUG
-	//fmt.Println(crane)
 	for _, line := range inputs {
 		s := strings.Split(line, " ")
 		move, _ := strconv.Atoi(s[1])
