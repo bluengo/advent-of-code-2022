@@ -8,18 +8,45 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
-	var crane1 = []string{"D", "L", "V", "T", "M", "H", "F"}
-	var crane2 = []string{"H", "Q", "G", "J", "C", "T", "N", "P"}
-	var crane3 = []string{"R", "S", "D", "M", "P", "H"}
-	var crane4 = []string{"L", "B", "V", "F"}
-	var crane5 = []string{"N", "H", "G", "L", "Q"}
-	var crane6 = []string{"W", "B", "D", "G", "R", "M", "P"}
-	var crane7 = []string{"G", "M", "N", "R", "C", "H", "L", "Q"}
-	var crane8 = []string{"C", "L", "W"}
-	var crane9 = []string{"R", "D", "L", "Q", "J", "Z", "M", "T"}
+	var crane = [][]string{
+		{"NULL"}, // To start from index 1:
+		{"D", "L", "V", "T", "M", "H", "F"},
+		{"H", "Q", "G", "J", "C", "T", "N", "P"},
+		{"R", "S", "D", "M", "P", "H"},
+		{"L", "B", "V", "F"},
+		{"N", "H", "G", "L", "Q"},
+		{"W", "B", "D", "G", "R", "M", "P"},
+		{"G", "M", "N", "R", "C", "H", "L", "Q"},
+		{"C", "L", "W"},
+		{"R", "D", "L", "Q", "J", "Z", "M", "T"},
+	}
+
+	inputs, err := openFile("example.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	for _, line := range inputs {
+		fmt.Println(line)
+		s := strings.Split(line, " ")
+		move, _ := strconv.Atoi(s[1])
+		src, _ := strconv.Atoi(s[3])
+		dst, _ := strconv.Atoi(s[5])
+		//fmt.Println(move, src, dst)
+
+		cargo := revertSlice(crane[src][:move])
+
+		// Move cargo:
+		for x := 0; x < move; x++ {
+			crane[dst] = append(crane[dst], cargo[x])
+		}
+		fmt.Println(crane)
+	}
 }
 
 func openFile(file string) ([]string, error) {
