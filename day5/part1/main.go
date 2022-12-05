@@ -11,15 +11,15 @@ import (
 )
 
 func main() {
-	var crane1 []string
-	var crane2 []string
-	var crane3 []string
-	var crane4 []string
-	var crane5 []string
-	var crane6 []string
-	var crane7 []string
-	var crane8 []string
-	var crane9 []string
+	var crane1 = []string{"D", "L", "V", "T", "M", "H", "F"}
+	var crane2 = []string{"H", "Q", "G", "J", "C", "T", "N", "P"}
+	var crane3 = []string{"R", "S", "D", "M", "P", "H"}
+	var crane4 = []string{"L", "B", "V", "F"}
+	var crane5 = []string{"N", "H", "G", "L", "Q"}
+	var crane6 = []string{"W", "B", "D", "G", "R", "M", "P"}
+	var crane7 = []string{"G", "M", "N", "R", "C", "H", "L", "Q"}
+	var crane8 = []string{"C", "L", "W"}
+	var crane9 = []string{"R", "D", "L", "Q", "J", "Z", "M", "T"}
 }
 
 func openFile(file string) ([]string, error) {
