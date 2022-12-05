@@ -53,14 +53,20 @@ func main() {
 
 		// Destination
 		dstslice := crane[dst]
-		//box := revertSlice(load)
+		box := revertSlice(load)
 		for x := 0; x < len(load); x++ {
-			dstslice = append(dstslice, load[x])
+			dstslice = append(dstslice, box[x])
 		}
 
 		// Update
 		crane[src] = srcslice
 		crane[dst] = dstslice
+
+		//DEBUG
+		/*
+			fmt.Println(line)
+			fmt.Println(crane)
+		*/
 	}
 	// Print result
 	out := []string{}
