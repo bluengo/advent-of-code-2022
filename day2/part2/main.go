@@ -1,7 +1,7 @@
 package main
 
 /*
-  Day 2. Part 1:
+  Day 2. Part 2:
   ==============
     rock (1) = A
     paper (2) = B

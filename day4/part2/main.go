@@ -1,7 +1,7 @@
 package main
 
 /*
-  Day 3. Part 1:
+  Day 4. Part 2:
 */
 
 import (

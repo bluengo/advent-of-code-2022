@@ -1,7 +1,7 @@
 package main
 
 /*
-  Day 3. Part 1:
+  Day 3. Part 2:
 */
 
 import (
@@ -26,7 +26,6 @@ func main() {
 		{"R", "D", "L", "Q", "J", "Z", "M", "T"},
 	}
 
-	//inputs, err := openFile("example.txt")
 	inputs, err := openFile("../inputs-day5.txt")
 	if err != nil {
 		panic(err)
@@ -62,11 +61,6 @@ func main() {
 		crane[src] = srcslice
 		crane[dst] = dstslice
 
-		//DEBUG
-		/*
-			fmt.Println(line)
-			fmt.Println(crane)
-		*/
 	}
 	// Print result
 	out := []string{}
