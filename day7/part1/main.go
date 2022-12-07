@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+var folderSizes = map[string]int{
+	"/": 0,
+}
+var sum int
+
 func main() {
 	pwd := []string{"/"}
 	//numregex := regexp.MustCompile(`^[0-9]$`)
@@ -42,6 +47,8 @@ func main() {
 		case "$":
 			switch stdin[1] {
 			case "cd":
+				// Stop counting previous folder
+				saveSum(strings.Join(pwd, " "), sum)
 				switch stdin[2] {
 				case "..":
 					// remove last dir from pwd
@@ -70,10 +77,14 @@ func main() {
 				panic(err)
 			}
 			fmt.Printf("File %s with size %d\n", stdin[1], size)
+			sum = sum + size
 			// ================
 		}
 	}
 	fmt.Println("Finish")
+	for k, v := range folderSizes {
+		fmt.Printf("The size of %s is: %d\n", k, v)
+	}
 }
 
 func openFile(file string) ([]string, error) {
@@ -93,4 +104,8 @@ func openFile(file string) ([]string, error) {
 	}
 
 	return fileLines, nil
+}
+
+func saveSum(path string, sum int) {
+	folderSizes[path] = sum
 }
