@@ -69,7 +69,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Printf("File %s with size %d", stdin[1], size)
+			fmt.Printf("File %s with size %d\n", stdin[1], size)
 			// ================
 		}
 	}
