@@ -8,22 +8,72 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func main() {
+	pwd := []string{"/"}
+	//numregex := regexp.MustCompile(`^[0-9]$`)
+	//charegex := regexp.MustCompile(`^[a-z]$`)
 
 	inputs, err := openFile("../inputs-day7.txt")
 	if err != nil {
 		panic(err)
 	}
 
+	// input into slice of slices
 	var lines [][]string
 	for _, line := range inputs {
 		command := strings.Split(line, " ")
 		lines = append(lines, command)
 	}
-	fmt.Println(lines)
+
+	// read and execute commands
+	// skip [0] ("cd /")
+	for x := 1; x < len(inputs)-1; x++ {
+		stdin := lines[x]
+		fmt.Println(stdin)
+		// in case of "<size> <file>" I try to find regex
+		//newsize := numregex.FindString(stdin[0])
+		//filename := charegex.FindAllStringSubmatch(stdin[1], 1)[0]
+		switch stdin[0] {
+		// Command ======
+		case "$":
+			switch stdin[1] {
+			case "cd":
+				switch stdin[2] {
+				case "..":
+					// remove last dir from pwd
+					if len(pwd) > 1 {
+						pwd = pwd[:len(pwd)-1]
+					}
+					//DEBUG
+					fmt.Println("PWD = ", pwd)
+				default:
+					folder := fmt.Sprintf("%s", stdin[2])
+					pwd = append(pwd, folder)
+					fmt.Println("PWD = ", pwd)
+				}
+			case "ls":
+				fmt.Println("ls to ", pwd)
+			}
+			// ================
+		// Dir
+		case "dir":
+			fmt.Println("Dir: ", stdin)
+			// ================
+		// File
+		default:
+			size, err := strconv.Atoi(stdin[0])
+			if err != nil {
+				panic(err)
+			}
+			fmt.Printf("File %s with size %d", stdin[1], size)
+			// ================
+		}
+	}
+	fmt.Println("Finish")
 }
 
 func openFile(file string) ([]string, error) {
