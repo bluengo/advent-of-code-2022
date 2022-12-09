@@ -5,7 +5,6 @@ def main():
     forest = []
     #Open inputs
     with open("../inputs-day8.txt", "r") as f:
-    #with open("example.txt", "r") as f:
         for line in f:
             newline = [int(i) for i in line[:-1]]
             forest.append(newline)
