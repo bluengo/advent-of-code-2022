@@ -7,8 +7,8 @@ def main():
     total = 0
     forest = []
     #Open inputs
-    #with open("../inputs-day8.txt", "r") as f:
-    with open("example.txt", "r") as f:
+    with open("../inputs-day8.txt", "r") as f:
+    #with open("example.txt", "r") as f:
         for line in f:
             newline = [int(i) for i in line[:-1]]
             forest.append(newline)
@@ -27,7 +27,7 @@ def main():
             print("\n")       
             left = forest[row][:col]
             right = forest[row][col:][1:]
-            top = getColumn(forest, col)[:row][:1]
+            top = getColumn(forest, col)[:row]
             bottom = getColumn(forest, col)[row:][1:]
 
             print(forest[row][col])
