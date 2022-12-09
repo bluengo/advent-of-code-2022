@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-
-
 def main():
-    results = []
     total = 0
     forest = []
     #Open inputs
@@ -37,33 +34,22 @@ def main():
             print(f"bottom: {bottom}")
             
             if forest[row][col] > max(left):
-                print(f"\n{forest[row][col]} visible from left")
-                results.append(f"{row}-{col}")
                 total += 1
                 continue
 
             elif forest[row][col] > max(right):
-                print(f"\n{forest[row][col]} visible from right")
-                results.append(f"{row}-{col}")
                 total += 1
                 continue
 
             elif forest[row][col] > max(top):
-                print(f"\n{forest[row][col]} visible from top")
-                results.append(f"{row}-{col}")
                 total += 1
                 continue
 
             elif forest[row][col] > max(bottom):
-                print(f"\n{forest[row][col]} visible from bottom")
-                results.append(f"{row}-{col}")
                 total += 1
                 continue
-            #else:
-                #print(f"{forest[row][col]} NOT VISIBLE")
 
     print(f"TOTAL: {total}")
-    print(results)
 
 def getColumn(arr, column_index):
     return [row[column_index] for row in arr]
