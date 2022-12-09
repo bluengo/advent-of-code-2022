@@ -8,20 +8,77 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
-var folderSizes = map[string]int{
-	"/": 0,
+type folder struct {
+	name string
+	path []string
+	size int
 }
-var sum int
+
+type filesystem struct {
+	folders []folder
+	pwd     string
+}
+
+func newFolder(name string, fs *filesystem) *folder {
+	fs.folders = append(fs.folders, name)
+	return &folder{
+		name: name,
+		path: fs.pwd + "/" + name,
+		size: 0,
+	}
+}
+
+func (fs *filesystem) GetPath(name string) string {
+	var result []string
+
+	for _, dir := range fs.folders {
+		if dir.name == name {
+			return strings.Join(dir.path, "/")
+		}
+	}
+	return nil
+}
+
+func (fs *filesystem) CheckFolder(name string) (bool, string) {
+	for _, dir := range fs.folders {
+		for _, dirname := range dir.path {
+			if name == dirname {
+				return true, fs.GetPath(name)
+			}
+		}
+	}
+	return false, ""
+}
+
+func (fld *folder) AddFile(size int) *folder {
+	return &folder{
+		path: fld.path,
+		size: fld.size + size,
+	}
+}
+
+func (fs *filesystem) Cd(dest string) {
+	exists, path := fs.CheckFolder(dest)
+	if exists {
+		fs.pwd = path
+	}
+	switch dest {
+	case "/":
+		fs.pwd = "/"
+	case "..":
+		full_path := strings.Split(fs.pwd, "/")
+		fs.pwd = strings.Join(full_path[:len(full_path)-1], "/")
+	default:
+		full_path := append(strings.Split(fs.pwd, "/"), dest)
+		fs.pwd = strings.Join(full_path, "/")
+	}
+	fs.pwd = dest
+}
 
 func main() {
-	pwd := []string{"/"}
-	//numregex := regexp.MustCompile(`^[0-9]$`)
-	//charegex := regexp.MustCompile(`^[a-z]$`)
-
 	inputs, err := openFile("../inputs-day7.txt")
 	if err != nil {
 		panic(err)
@@ -34,56 +91,17 @@ func main() {
 		lines = append(lines, command)
 	}
 
-	// read and execute commands
-	// skip [0] ("cd /")
-	for x := 1; x < len(inputs)-1; x++ {
+	// Read and execute commands
+	for x := 0; x < len(inputs)-1; x++ {
 		stdin := lines[x]
-		fmt.Println(stdin)
-		// in case of "<size> <file>" I try to find regex
-		//newsize := numregex.FindString(stdin[0])
-		//filename := charegex.FindAllStringSubmatch(stdin[1], 1)[0]
+
 		switch stdin[0] {
-		// Command ======
 		case "$":
-			switch stdin[1] {
-			case "cd":
-				// Stop counting previous folder
-				saveSum(strings.Join(pwd, " "), sum)
-				switch stdin[2] {
-				case "..":
-					// remove last dir from pwd
-					if len(pwd) > 1 {
-						pwd = pwd[:len(pwd)-1]
-					}
-					//DEBUG
-					fmt.Println("PWD = ", pwd)
-				default:
-					folder := fmt.Sprintf("%s", stdin[2])
-					pwd = append(pwd, folder)
-					fmt.Println("PWD = ", pwd)
-				}
-			case "ls":
-				fmt.Println("ls to ", pwd)
-			}
-			// ================
-		// Dir
+			// commands
 		case "dir":
-			fmt.Println("Dir: ", stdin)
-			// ================
-		// File
-		default:
-			size, err := strconv.Atoi(stdin[0])
-			if err != nil {
-				panic(err)
-			}
-			fmt.Printf("File %s with size %d\n", stdin[1], size)
-			sum = sum + size
-			// ================
+			// append subdir to subdir
 		}
-	}
-	fmt.Println("Finish")
-	for k, v := range folderSizes {
-		fmt.Printf("The size of %s is: %d\n", k, v)
+
 	}
 }
 
@@ -104,8 +122,4 @@ func openFile(file string) ([]string, error) {
 	}
 
 	return fileLines, nil
-}
-
-func saveSum(path string, sum int) {
-	folderSizes[path] = sum
 }

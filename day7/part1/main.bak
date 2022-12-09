@@ -1,0 +1,140 @@
+package main
+
+/*
+  Day 7. Part 1:
+*/
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+type folder struct {
+	name       string
+	path       string
+	subfolders []string
+	size       int
+}
+
+var folderSizes = map[string]int{
+	"/": 0,
+}
+
+var filesystem = map[string]folder{}
+
+var sum int
+var pwd = []string{"/"}
+var newdir = folder{}
+
+func main() {
+	//numregex := regexp.MustCompile(`^[0-9]$`)
+	//charegex := regexp.MustCompile(`^[a-z]$`)
+
+	inputs, err := openFile("../inputs-day7.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	// input into slice of slices
+	var lines [][]string
+	for _, line := range inputs {
+		command := strings.Split(line, " ")
+		lines = append(lines, command)
+	}
+
+	// Read and execute commands
+	for x := 0; x < len(inputs)-1; x++ {
+		stdin := lines[x]
+		//fmt.Println(stdin)
+		switch stdin[0] {
+
+		// Command ======
+		case "$":
+			switch stdin[1] {
+			case "cd":
+				// Stop counting previous folder
+				if newdir.name != "" {
+					saveSum(newdir.name, newdir.size)
+				}
+				// Append to map
+				filesystem[strings.Join(pwd, "")] = newdir
+
+				switch stdin[2] {
+				case "/":
+					pwd = []string{"/"}
+					newdir.name = "/"
+				case "..":
+					// remove last dir from pwd
+					if len(pwd) > 1 {
+						pwd = pwd[:len(pwd)-1]
+					}
+				default:
+					// Create folder
+					newdir = folder{
+						name: stdin[2],
+						path: strings.Join(pwd, ""),
+						size: 0,
+					}
+					folder := fmt.Sprintf("/%s", stdin[2])
+					pwd = append(pwd, folder)
+				}
+			case "ls":
+				//sum = 0
+			}
+			// ================
+		// Dir
+		case "dir":
+			newdir.subfolders = append(newdir.subfolders, stdin[1])
+			fmt.Println(newdir.subfolders[:])
+		// File
+		default:
+			size, err := strconv.Atoi(stdin[0])
+			if err != nil {
+				panic(err)
+			}
+			//fmt.Printf("File %s with size %d\n", stdin[1], size)
+			sum = sum + size
+		}
+		/*
+			for k, v := range folderSizes {
+				fmt.Printf("The size of %s is: %d\n", k, v)
+			}
+			fmt.Println(" === ")
+			for k, v := range filesystem {
+				fmt.Printf("Folder: %s\n", k)
+				fmt.Println("Subfolders:")
+				for _, folder := range v.subfolders {
+					fmt.Println(folder)
+				}
+				fmt.Printf("Total size: %d\n", v.size)
+			}
+		*/
+	}
+	fmt.Println("Finish")
+}
+
+func openFile(file string) ([]string, error) {
+	var fileLines []string
+	readFile, err := os.Open(file)
+	if err != nil {
+		fmt.Println("Error opening inputs file")
+		return nil, err
+	}
+	defer readFile.Close()
+
+	fileScanner := bufio.NewScanner(readFile)
+	fileScanner.Split(bufio.ScanLines)
+
+	for fileScanner.Scan() {
+		fileLines = append(fileLines, fileScanner.Text())
+	}
+
+	return fileLines, nil
+}
+
+func saveSum(path string, sum int) {
+	folderSizes[path] = sum
+}
