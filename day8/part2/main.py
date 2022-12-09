@@ -8,7 +8,6 @@ def main():
     
     #Open inputs
     with open("../inputs-day8.txt", "r") as f:
-    #with open("../example.txt", "r") as f:
         for line in f.readlines():
             trees.append([int(i) for i in line[:-1]])
     f.close()
