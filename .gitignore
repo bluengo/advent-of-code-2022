@@ -11,5 +11,8 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# Day 7 until I clean up the spaghetti I wrote
+day7/
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
